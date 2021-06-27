@@ -1,0 +1,43 @@
+version: "3"
+services:
+  backend_adonis_db:
+    container_name: "backend_adonis_db"
+    image: backend_adonis_db
+    build:
+      context: .
+      dockerfile: backend_adonis_db.dockerfile
+    ports:
+      - 19101:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: backend_adonis_db
+    networks:
+      - backend_adonis_network
+    volumes:
+      - "backend_adonis_db_volume_new:/var/lib/mysql:rw"
+
+  backend_adonis_api_phpmyadmin:
+    container_name: "backend_adonis_api_phpmyadmin"
+    image: backend_adonis_api_phpmyadmin
+    build:
+      context: .
+      dockerfile: backend_adonis_api_phpmyadmin.dockerfile
+    networks:
+      - backend_adonis_network
+    links:
+      - backend_adonis_db:db
+    ports:
+      - 19102:80
+    restart: always
+    depends_on:
+      - backend_adonis_db
+
+volumes:
+  backend_adonis_db_volume_new: {}
+
+networks:
+  backend_adonis_network:
+    driver: bridge

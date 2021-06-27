@@ -1,0 +1,25 @@
+version: "3"
+services:
+  backend_adonis_api:
+    container_name: backend_adonis_api
+    image: backend_adonis_api
+    build:
+      context: .
+      dockerfile: backend_adonis_api.dockerfile
+    ports:
+      - 19201:3333
+    networks:
+      # - backend_adonis_backend_adonis_network #เอามาจาก cli -> docker network ls
+      - backend_adonis_backend_adonis_network
+    volumes:
+      - "/home/backend_adonis_api_images:/app/public:rw"
+    restart: always
+    working_dir: /app
+
+    # volumes:
+    # sweep_admin_backend_image_upload_volume: {}
+
+networks:
+  # backend_adonis_backend_adonis_network: # for window home docker
+  backend_adonis_backend_adonis_network:
+    external: true
